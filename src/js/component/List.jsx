@@ -5,6 +5,9 @@ import { useState } from "react";
 export function ListComponent() {
   /* Creamos un State para monitorear  */
   const [content, setContent] = useState([]);
+  /* useState para mintorear el estado del hover, IDK SI ES NECESARIO, PUEDE QUE SE PUEDA REPLICAR CON CALLBACK
+  COMO EN EL ENVIO DE DATA CHILD-PARENT */
+  const [hover, setHover] = useState(-1);
 
   /*Recibimos informacion del evento en el handler captureContent,
   onKeyDown retorna un parametro importante */
@@ -16,10 +19,11 @@ export function ListComponent() {
       e.target.value = "";
     }
   }
-  /* uncion para ser enviada como callback y poder traer informacion del componente hijo */
+  /* Funcion para ser enviada como callback y poder traer informacion del componente hijo (to DELETE ITEMS) */
   function removeContent(indx) {
     setContent(content.filter((_, i) => i !== indx));
   }
+
   /* Enviamos los props correspondientes al hijo (ListItems) y hacemos la estructura base  */
   return (
     <div className="container-fluid px-4">
@@ -35,7 +39,12 @@ export function ListComponent() {
             onKeyDown={captureContent}
             key="uniqueKey"
           />
-          <ListItems itemsToRender={content} sendToParent={removeContent} />
+          <ListItems
+            itemsToRender={content}
+            sendToParent={removeContent}
+            getHover={hover}
+            sHover={setHover}
+          />
           <li className="list-group-item d-sm-flex h-25">
             <div className="p-0 m-0" style={{ height: "3em" }}>
               <p className="pb-2 m-0 fw-lighter " style={{ fontSize: 11 }}>
